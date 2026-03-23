@@ -3,6 +3,7 @@
 #include "DoublyLinkedList.hpp"
 #include "SinglyLinkedList.hpp"
 #include "Stack.hpp"
+#include "BinarySearchTree.hpp"
 
 int main() {
     std::cout << "--- TESTING DYNAMIC ARRAY ---\n";
@@ -44,6 +45,18 @@ int main() {
     std::cout << "Stack top element: " << stack.top() << "\n";
     std::cout << "Stack elements (top to bottom): ";
     stack.display();
+
+
+    std::cout << "\n--- TESTING BINARY SEARCH TREE ---\n";
+    BinarySearchTree<int> bst;
+    bst.insert(50);
+    bst.insert(30);
+    bst.insert(70);
+    bst.insert(20);
+    bst.insert(40);
+    std::cout << "BST size: " << bst.getSize() << "\n";
+    std::cout << "BST inorder (should be sorted): ";
+    bst.displayInorder();
 
     std::cout << "\nAll structures compiled and executed successfully!\n";
     return 0;
