@@ -9,21 +9,20 @@ private:
     T* data;
     int size;
     int capacity;
-    // TODO: Podwajanie pamieci do zmiany
-    // Helper method to double the capacity when the array is full
+    // Helper method to expand the capacity linearly when the array is full
+    // Adding only one element may be not time effective
     void resize() {
-        capacity *= 2;
+        int growthStep = 1;
+        capacity += growthStep;
+
         T* newData = new T[capacity];
 
-        // Copy existing elements to the new memory block
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; ++i) {
             newData[i] = data[i];
         }
 
-        // Free the old memory block to prevent memory leaks
         delete[] data;
 
-        // Point to the newly allocated block
         data = newData;
     }
 
@@ -64,7 +63,7 @@ public:
         return data[index];
     }
 
-    int getSize() const {
+    [[nodiscard]] int getSize() const {
         return size;
     }
 
