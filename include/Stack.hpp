@@ -57,11 +57,11 @@ public:
         return topNode->data;
     }
 
-    bool empty() const {
+    [[nodiscard]] bool empty() const {
         return topNode == nullptr;
     }
 
-    int getSize() const {
+    [[nodiscard]] int getSize() const {
         return size;
     }
 

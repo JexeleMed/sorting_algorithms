@@ -2,6 +2,7 @@
 #define DYNAMIC_ARRAY_HPP
 
 #include <iostream>
+#include <cstdlib>
 
 template <typename T>
 class DynamicArray {
@@ -56,9 +57,8 @@ public:
     // Overload [] operator for fast access
     T& operator[](int index) {
         if (index < 0 || index >= size) {
-            std::cerr << "Error: Index out of bounds. Returning dummy reference.\n";
-            static T dummy_value{};
-            return dummy_value;
+            std::cerr << "Fatal Error: Index " << index << " out of bounds in DynamicArray! Terminating program.\n";
+            std::exit(EXIT_FAILURE);
         }
         return data[index];
     }

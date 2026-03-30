@@ -79,7 +79,7 @@ public:
         std::cout << "\n";
     }
 
-    int getSize() const {
+    [[nodiscard]] int getSize() const {
         return size;
     }
 };

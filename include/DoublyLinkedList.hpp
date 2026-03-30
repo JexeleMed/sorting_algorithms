@@ -159,7 +159,7 @@ public:
         return current->data;
     }
 
-    int getSize() const {
+    [[nodiscard]] int getSize() const {
         return count;
     }
 

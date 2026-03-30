@@ -2,6 +2,7 @@
 #define SINGLY_LINKED_LIST_HPP
 
 #include <iostream>
+#include <cstdlib>
 
 template <typename T>
 class SinglyLinkedList {
@@ -64,20 +65,18 @@ public:
     // Overload [] operator for sorting algorithms
     T& operator[](int index) {
         if (index < 0 || index >= size) {
-            std::cerr << "Error: Index out of bounds. Returning dummy reference.\n";
-            // TODO: Zastanowic sie czy lepiej nie przerwac tu programu
-            static T dummy_value{};
-            return dummy_value;
+            std::cerr << "Fatal Error: Index " << index << " out of bounds in SinglyLinkedList! Terminating program.\n";
+            std::exit(EXIT_FAILURE);
         }
 
         Node* current = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < index; ++i) {
             current = current->next;
         }
         return current->data;
     }
 
-    int getSize() const {
+    [[nodiscard]]int getSize() const {
         return size;
     }
 
