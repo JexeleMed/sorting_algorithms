@@ -81,5 +81,46 @@ int main() {
 
     std::cout << "After sorting:     ";
     arr1.display();
+
+
+
+    std::cout << "\n--- TESTING QUICK SORT ---\n";
+    DynamicArray<int> arr2;
+    arr2.append(50);
+    arr2.append(23);
+    arr2.append(9);
+    arr2.append(18);
+    arr2.append(61);
+    arr2.append(32);
+
+    std::cout << "Before Quick Sort: ";
+    arr2.display();
+
+    quickSort(arr2, PivotStrategy::MIDDLE);
+
+    std::cout << "After Quick Sort:    ";
+    arr2.display();
+
+    std::cout << "\n--- TESTING BUCKET SORT ---\n";
+    DynamicArray<int> arr3;
+
+    arr3.append(78);
+    arr3.append(17);
+    arr3.append(39);
+    arr3.append(26);
+    arr3.append(72);
+    arr3.append(94);
+    arr3.append(21);
+    arr3.append(12);
+    arr3.append(23);
+    arr3.append(68);
+
+    std::cout << "Before Bucket Sort: ";
+    arr3.display();
+
+    bucketSort(arr3);
+
+    std::cout << "After Bucket Sort:    ";
+    arr3.display();
     return 0;
 }
