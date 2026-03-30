@@ -4,6 +4,7 @@
 #include "SinglyLinkedList.hpp"
 #include "Stack.hpp"
 #include "BinarySearchTree.hpp"
+#include "Sorting.hpp"
 
 int main() {
     std::cout << "--- TESTING DYNAMIC ARRAY ---\n";
@@ -59,5 +60,26 @@ int main() {
     bst.displayInorder();
 
     std::cout << "\nAll structures compiled and executed successfully!\n";
+
+
+    std::cout << "--- TESTING SHELL SORT ---\n";
+    DynamicArray<int> arr1;
+
+    // Array init
+    arr1.append(45);
+    arr1.append(12);
+    arr1.append(89);
+    arr1.append(33);
+    arr1.append(1);
+    arr1.append(9);
+
+    std::cout << "Before sorting: ";
+    arr1.display();
+
+
+    shellSort(arr1, ShellGap::KNUTH);
+
+    std::cout << "After sorting:     ";
+    arr1.display();
     return 0;
 }

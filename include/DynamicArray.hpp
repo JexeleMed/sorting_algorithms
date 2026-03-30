@@ -9,7 +9,7 @@ private:
     T* data;
     int size;
     int capacity;
-
+    // TODO: Podwajanie pamieci do zmiany
     // Helper method to double the capacity when the array is full
     void resize() {
         capacity *= 2;

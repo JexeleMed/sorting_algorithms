@@ -61,11 +61,11 @@ public:
         }
         size--;
     }
-
     // Overload [] operator for sorting algorithms
     T& operator[](int index) {
         if (index < 0 || index >= size) {
             std::cerr << "Error: Index out of bounds. Returning dummy reference.\n";
+            // TODO: Zastanowic sie czy lepiej nie przerwac tu programu
             static T dummy_value{};
             return dummy_value;
         }

@@ -16,7 +16,7 @@ private:
 
     Node* head;
     Node* tail;
-    int count; // Added to track size in O(1) time
+    int count;
 
 public:
     DoublyLinkedList() : head(nullptr), tail(nullptr), count(0) {}

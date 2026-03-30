@@ -1,6 +1,11 @@
 #ifndef BINARY_SEARCH_TREE_HPP
 #define BINARY_SEARCH_TREE_HPP
 
+#ifdef WIN32 // __linux__ __APPLE__
+
+#elif __linux__
+
+#endif
 #include <iostream>
 
 template <typename T>
