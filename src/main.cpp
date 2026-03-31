@@ -8,7 +8,7 @@
 #include "Parameters.hpp"
 
 int main(int argc, char** argv) {
-    if (Parameters::readParameters(argc, argv) != 0) {
+    if (Parameters::readParameters(argc - 1, argv + 1) != 0) {
         std::cerr << "\nParsing error. Use -h or --help for help.\n";
         return -1;
     }

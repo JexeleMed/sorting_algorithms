@@ -9,6 +9,11 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror")
 
 include_directories(include)
 
+
+add_library(parameters_lib SHARED src/Parameters.cpp)
+
+
 add_executable(${PROJECT_NAME}
-        src/main.cpp
-        src/Parameters.cpp)
+        src/main.cpp)
+
+target_link_libraries(${PROJECT_NAME} parameters_lib)
