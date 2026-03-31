@@ -9,4 +9,6 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror")
 
 include_directories(include)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+        src/Parameters.cpp)
