@@ -73,20 +73,20 @@ namespace Parameters
     // Parameters to use.
     //
 
-    RunModes runMode = RunModes::undefined;
-    Algorithms algorithm = Algorithms::undefined;
-    Structures structure = Structures::undefined;
-    DataTypes dataType = DataTypes::undefined;
+    inline RunModes runMode = RunModes::undefined;
+    inline Algorithms algorithm = Algorithms::undefined;
+    inline Structures structure = Structures::undefined;
+    inline DataTypes dataType = DataTypes::undefined;
 
-    std::string inputFile = {};
-    std::string outputFile = {};
-    std::string resultsFile = {};
+    inline std::string inputFile = {};
+    inline std::string outputFile = {};
+    inline std::string resultsFile = {};
 
-    int structureSize = -1;
-    int iterations = -1;
+    inline int structureSize = -1;
+    inline int iterations = -1;
 
-    Pivots pivot = Pivots::undefined;
-    ShellParameters shellParameter = ShellParameters::undefined;
+    inline Pivots pivot = Pivots::undefined;
+    inline ShellParameters shellParameter = ShellParameters::undefined;
 
     //
     // Methods to use.
