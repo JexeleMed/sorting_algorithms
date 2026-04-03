@@ -1,104 +1,109 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
+#define LIB_VERSION "v.1.1"
+
 #include <string>
 
 namespace Parameters
 {
-    enum class RunModes {
-        undefined = -1,
-        singleFile = 0,
-        benchmark,
-        help
-      };
+  enum class RunModes {
+    undefined = -1,
+    singleFile = 0,
+    benchmark,
+    help
+  };
 
-    enum class Algorithms {
-        undefined = -1,
-        bubble = 0,
-        cocktail,
-        merge,
-        insertion,
-        quick,
-        shell,
+  enum class Algorithms {
+    undefined = -1,
+    bubble = 0,
+    cocktail,
+    merge,
+    insertion,
+    bucket,
+    quick,
+    shell,
 
-        count
-      };
+    count
+  };
 
-    enum class Structures {
-        undefined = -1,
-        array = 0,
-        singleList,
-        doubleList,
-        queue,
-        stack,
-        binaryTree,
+  enum class Structures {
+    undefined = -1,
+    array = 0,
+    singleList,
+    doubleList,
+    queue,
+    stack,
+    binaryTree,
 
-        count
-      };
+    count
+  };
 
-    enum class DataTypes {
-        undefined = -1,
-        typeInt = 0,
-        typeFloat,
-        typeDouble,
-        typeChar,
-        typeString,
-        typeUnsignedLong,
-        typeUnsignedChar,
+  enum class DataTypes {
+    undefined = -1,
+    typeInt = 0,
+    typeFloat,
+    typeDouble,
+    typeChar,
+    typeString,
+    tyleUnsignedInt,
+    typeUnsignedLong,
+    typeUnsignedChar,
 
-        count
-      };
+    count
+  };
 
-    enum class Pivots {
-        undefined = -1,
-        random = 0,
-        left,
-        right,
-        middle,
+  enum class Pivots {
+    undefined = -1,
+    random = 0,
+    left,
+    right,
+    middle,
 
-        count
-      };
+    count
+  };
 
-    enum class ShellParameters {
-        undefined = -1,
-        option1 = 0,
-        option2,
-        option3,
-        option4,
+  enum class ShellParameters {
+    undefined = -1,
+    option1 = 0,
+    option2,
+    option3,
+    option4,
 
-        count
-      };
+    count
+  };
 
-    //
-    // Parameters to use.
-    //
+  //
+  // Parameters to use.
+  //
 
-    inline RunModes runMode = RunModes::undefined;
-    inline Algorithms algorithm = Algorithms::undefined;
-    inline Structures structure = Structures::undefined;
-    inline DataTypes dataType = DataTypes::undefined;
+  extern RunModes runMode;
+  extern Algorithms algorithm;
+  extern Structures structure;
+  extern DataTypes dataType;
 
-    inline std::string inputFile = {};
-    inline std::string outputFile = {};
-    inline std::string resultsFile = {};
+  extern std::string inputFile;
+  extern std::string outputFile;
+  extern std::string resultsFile;
 
-    inline int structureSize = -1;
-    inline int iterations = -1;
+  extern int structureSize;
+  extern int iterations;
 
-    inline Pivots pivot = Pivots::undefined;
-    inline ShellParameters shellParameter = ShellParameters::undefined;
+  extern Pivots pivot;
+  extern ShellParameters shellParameter;
 
-    //
-    // Methods to use.
-    //
+  //
+  // Methods to use.
+  //
 
-    int readParameters(int argc, char **argv);
-    void printParameters();
+  int readParameters(int argc, char **argv);
+  void printParameters();
 
-    void enableDebug();
-    void disableDebug();
+  void enableDebug();
+  void disableDebug();
 
-    void help();
+  void help();
+  const char *getVersion();
 };
 
 #endif

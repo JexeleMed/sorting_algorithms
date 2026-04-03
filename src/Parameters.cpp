@@ -8,6 +8,29 @@
 namespace Parameters
 {
 
+//
+// Setting default values for parameters.
+//
+
+RunModes runMode = RunModes::undefined;
+Algorithms algorithm = Algorithms::undefined;
+Structures structure = Structures::undefined;
+DataTypes dataType = DataTypes::undefined;
+
+std::string inputFile = {};
+std::string outputFile = {};
+std::string resultsFile = {};
+
+int structureSize = -1;
+int iterations = -1;
+
+Pivots pivot = Pivots::undefined;
+ShellParameters shellParameter = ShellParameters::undefined;
+
+//
+// Additional internal variables.
+//
+
 bool debug = false;
 bool errorFlag = false;
 
@@ -213,8 +236,9 @@ void help()
   std::cout << "                        1 - Cocktail sort\n";
   std::cout << "                        2 - Merge sort\n";
   std::cout << "                        3 - Insertion sort\n";
-  std::cout << "                        4 - Quick sort\n";
-  std::cout << "                        5 - Shell sort\n";
+  std::cout << "                        4 - Bucket sort\n";
+  std::cout << "                        5 - Quick sort\n";
+  std::cout << "                        6 - Shell sort\n";
   std::cout << "  -s, --structure VAL   0 - Array\n";
   std::cout << "                        1 - Single linked list\n";
   std::cout << "                        2 - Double linked list\n";
@@ -225,9 +249,10 @@ void help()
   std::cout << "                        1 - float\n";
   std::cout << "                        2 - double\n";
   std::cout << "                        3 - char\n";
-  std::cout << "                        4 - unsigned int\n";
-  std::cout << "                        5 - unsigned long\n";
-  std::cout << "                        6 - unsigned char\n";
+  std::cout << "                        4 - std::string\n";
+  std::cout << "                        5 - unsigned int\n";
+  std::cout << "                        6 - unsigned long\n";
+  std::cout << "                        7 - unsigned char\n";
   std::cout << "  -p, --pivot VAL       0 - random\n";
   std::cout << "                        1 - left\n";
   std::cout << "                        2 - right\n";
@@ -270,6 +295,11 @@ void printParameters()
   std::cout << LOG(resultsFile) << ", "
             << LOG(structureSize) << ", "
             << LOG(iterations) << "\n";
+}
+
+const char *getVersion()
+{
+  return LIB_VERSION;
 }
 
 }
