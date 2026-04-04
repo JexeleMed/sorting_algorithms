@@ -107,13 +107,6 @@ int readParameters(int argc, char **argv)
       runMode = RunModes::help;
       continue;
     }
-    else if (arg == "-d" || arg == "--distribution") {
-      if (i + 1 < argc) {
-        int val = std::stoi(argv[++i]);
-        distribution = static_cast<Distributions>(val);
-      }
-    }
-
     //
     // Parameters that require passed value.
     //
@@ -150,6 +143,11 @@ int readParameters(int argc, char **argv)
     if (check(arg, "--dataType", "-t"))
     {
       updateEnumParameter(dataType, DataTypes::count, value);
+      continue;
+    }
+    if (check(arg, "--distribution", "-d"))
+    {
+      distribution = static_cast<Distributions>(std::stoi(value));
       continue;
     }
 

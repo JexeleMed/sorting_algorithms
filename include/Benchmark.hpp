@@ -23,6 +23,16 @@ namespace Benchmark {
         }
     }
 
+    inline DataGenerator::Distribution getDistribution() {
+        switch (Parameters::distribution) {
+            case Parameters::Distributions::ascending:  return DataGenerator::Distribution::ASCENDING;
+            case Parameters::Distributions::descending: return DataGenerator::Distribution::DESCENDING;
+            case Parameters::Distributions::halfSorted: return DataGenerator::Distribution::HALF_SORTED;
+            case Parameters::Distributions::random:
+            default:                                    return DataGenerator::Distribution::RANDOM;
+        }
+    }
+
     inline ShellGap getShellGap() {
         switch (Parameters::shellParameter) {
             case Parameters::ShellParameters::option1: return ShellGap::ORIGINAL;
@@ -69,9 +79,7 @@ namespace Benchmark {
         for (int i = 0; i < Parameters::iterations; ++i) {
             double iterationTime = 0.0;
 
-            // TODO: Zmien parametr DataGenerator::Distribution do celów badawczych (Badanie B)
-            auto currentDist = DataGenerator::Distribution::RANDOM;
-
+            auto currentDist = getDistribution();
             if (Parameters::structure == Parameters::Structures::array) {
                 DynamicArray<T> arr;
                 DataGenerator::populate<DynamicArray<T>, T>(arr, Parameters::structureSize, currentDist);
