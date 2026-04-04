@@ -44,7 +44,7 @@ namespace Benchmark {
     }
 
     template <typename Container>
-    double executeSortingAlgorithm(Container& container) {
+        double executeSortingAlgorithm(Container& container) {
         auto start = std::chrono::high_resolution_clock::now();
 
         if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -55,6 +55,18 @@ namespace Benchmark {
         }
         else if (Parameters::algorithm == Parameters::Algorithms::bucket) {
             bucketSort(container);
+        }
+        else if (Parameters::algorithm == Parameters::Algorithms::bubble) {
+            bubbleSort(container);
+        }
+        else if (Parameters::algorithm == Parameters::Algorithms::cocktail) {
+            cocktailSort(container);
+        }
+        else if (Parameters::algorithm == Parameters::Algorithms::insertion) {
+            insertionSort(container);
+        }
+        else if (Parameters::algorithm == Parameters::Algorithms::merge) {
+            mergeSort(container);
         }
         else {
             std::cerr << "\n[!] Benchmark does not support this algorithm yet!\n";
