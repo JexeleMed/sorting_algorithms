@@ -73,6 +73,16 @@ namespace Parameters
     count
   };
 
+  enum class Distributions {
+    undefined = -1,
+    random = 0,
+    ascending,
+    descending,
+    halfSorted,
+
+    count
+  };
+
   //
   // Parameters to use.
   //
@@ -81,6 +91,7 @@ namespace Parameters
   extern Algorithms algorithm;
   extern Structures structure;
   extern DataTypes dataType;
+  extern Distributions distribution;
 
   extern std::string inputFile;
   extern std::string outputFile;

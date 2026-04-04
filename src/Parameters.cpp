@@ -16,7 +16,7 @@ RunModes runMode = RunModes::undefined;
 Algorithms algorithm = Algorithms::undefined;
 Structures structure = Structures::undefined;
 DataTypes dataType = DataTypes::undefined;
-
+Distributions distribution = Distributions::random;
 std::string inputFile = {};
 std::string outputFile = {};
 std::string resultsFile = {};
@@ -106,6 +106,12 @@ int readParameters(int argc, char **argv)
     {
       runMode = RunModes::help;
       continue;
+    }
+    else if (arg == "-d" || arg == "--distribution") {
+      if (i + 1 < argc) {
+        int val = std::stoi(argv[++i]);
+        distribution = static_cast<Distributions>(val);
+      }
     }
 
     //
@@ -270,6 +276,11 @@ void help()
   std::cout << "  -r, --resultsFile FILE   Results (time and parameters) will be saved to this file\n";
   std::cout << "  -l, --structureSize LEN  How many elements in the structure.\n";
   std::cout << "  -n, --iterations ITE :)  How many repetitions of the research with the given parameters.\n";
+  std::cout << "  -d, --distribution <int>  \n";
+  std::cout << "                        0 - random \n";
+  std::cout << "                        1 - ascending\n";
+  std::cout << "                        2 - descending\n";
+  std::cout << "                        3 - half-sorted\n";
   std::cout << "Examples:\n";
   std::cout << "  ./project --singleFile --inputFile \"in.txt\" --outputFile \"out.txt\" -a 0 -s 1 -t 0\n";
   std::cout << "  Sort values from file \"in.txt\". Bubble sort, single linked list, integers. Save sorted values in \"out.txt\"\n";
@@ -287,7 +298,8 @@ void printParameters()
             << LOG_ENUM(structure) << ", "
             << LOG_ENUM(dataType) << ", "
             << LOG_ENUM(pivot) << ", "
-            << LOG_ENUM(shellParameter) << "\n";
+            << LOG_ENUM(shellParameter) << ", "
+            << LOG_ENUM(distribution) << "\n";
   std::cout << "Single file options:\n";
   std::cout << LOG(inputFile) << ", "
             << LOG(outputFile) << "\n";

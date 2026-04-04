@@ -69,19 +69,22 @@ namespace Benchmark {
         for (int i = 0; i < Parameters::iterations; ++i) {
             double iterationTime = 0.0;
 
+            // TODO: Zmien parametr DataGenerator::Distribution do celów badawczych (Badanie B)
+            auto currentDist = DataGenerator::Distribution::RANDOM;
+
             if (Parameters::structure == Parameters::Structures::array) {
                 DynamicArray<T> arr;
-                for (int j = 0; j < Parameters::structureSize; ++j) arr.append(DataGenerator::generateRandom<T>());
+                DataGenerator::populate<DynamicArray<T>, T>(arr, Parameters::structureSize, currentDist);
                 iterationTime = executeSortingAlgorithm(arr);
             }
             else if (Parameters::structure == Parameters::Structures::singleList) {
                 SinglyLinkedList<T> sList;
-                for (int j = 0; j < Parameters::structureSize; ++j) sList.append(DataGenerator::generateRandom<T>());
+                DataGenerator::populate<SinglyLinkedList<T>, T>(sList, Parameters::structureSize, currentDist);
                 iterationTime = executeSortingAlgorithm(sList);
             }
             else if (Parameters::structure == Parameters::Structures::doubleList) {
                 DoublyLinkedList<T> dList;
-                for (int j = 0; j < Parameters::structureSize; ++j) dList.append(DataGenerator::generateRandom<T>());
+                DataGenerator::populate<DoublyLinkedList<T>, T>(dList, Parameters::structureSize, currentDist);
                 iterationTime = executeSortingAlgorithm(dList);
             }
             else {

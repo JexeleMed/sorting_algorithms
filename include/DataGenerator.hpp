@@ -2,52 +2,70 @@
 #define DATAGENERATOR_HPP
 
 #include <random>
-#include <type_traits>
-#include <limits>
-#include <string>
+#include <vector>
+#include <algorithm>
 
 namespace DataGenerator {
 
-    // Mersenne Twister
+    enum class Distribution {
+        RANDOM,
+        ASCENDING,
+        DESCENDING,
+        HALF_SORTED
+    };
+
     inline std::mt19937& getEngine() {
         static std::random_device rd;
         static std::mt19937 gen(rd());
         return gen;
     }
 
-    // Throws error when type is not handled
     template<typename T>
-    T generateRandom() {
-        static_assert(sizeof(T) == 0, "Type not handled!");
+    T generateSingle() {
+        static_assert(sizeof(T) == 0, "Unsupported type!");
         return T();
     }
 
-    // int
     template<>
-    inline int generateRandom<int>() {
+    inline int generateSingle<int>() {
         std::uniform_int_distribution<int> dist(1, 100000);
         return dist(getEngine());
     }
 
-    // float
     template<>
-    inline float generateRandom<float>() {
+    inline float generateSingle<float>() {
         std::uniform_real_distribution<float> dist(1.0f, 100000.0f);
         return dist(getEngine());
     }
 
-    // char (ASCI)
     template<>
-    inline char generateRandom<char>() {
+    inline char generateSingle<char>() {
         std::uniform_int_distribution<int> dist(33, 126);
         return static_cast<char>(dist(getEngine()));
     }
 
-    // double
-    template<>
-    inline double generateRandom<double>() {
-        std::uniform_real_distribution<double> dist(1.0, 100000.0);
-        return dist(getEngine());
+    template <typename Container, typename T>
+    void populate(Container& container, int size, Distribution dist = Distribution::RANDOM) {
+        std::vector<T> temp;
+        temp.reserve(size);
+
+        for (int i = 0; i < size; ++i) {
+            temp.push_back(generateSingle<T>());
+        }
+
+        if (dist == Distribution::ASCENDING) {
+            std::sort(temp.begin(), temp.end());
+        }
+        else if (dist == Distribution::DESCENDING) {
+            std::sort(temp.begin(), temp.end(), std::greater<T>());
+        }
+        else if (dist == Distribution::HALF_SORTED) {
+            std::sort(temp.begin(), temp.begin() + (size / 2));
+        }
+
+        for (int i = 0; i < size; ++i) {
+            container.append(temp[i]);
+        }
     }
 }
 
