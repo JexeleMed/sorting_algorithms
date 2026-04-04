@@ -194,4 +194,144 @@ void bucketSort(Container& arr) {
     delete[] buckets;
 }
 
+
+// ------- BUBBLE SORT -------
+template <typename Container>
+void bubbleSort(Container& arr) {
+    int n = arr.getSize();
+    if (n <= 1) return;
+
+    for (int i = 0; i < n - 1; ++i) {
+        bool swapped = false;
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                auto temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+    }
+}
+
+// ------- COCKTAIL SORT -------
+template <typename Container>
+void cocktailSort(Container& arr) {
+    int n = arr.getSize();
+    if (n <= 1) return;
+
+    bool swapped = true;
+    int start = 0;
+    int end = n - 1;
+
+    while (swapped) {
+        swapped = false;
+
+        for (int i = start; i < end; ++i) {
+            if (arr[i] > arr[i + 1]) {
+                auto temp = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temp;
+                swapped = true;
+            }
+        }
+
+        if (!swapped) break;
+
+        swapped = false;
+        end--;
+
+        for (int i = end - 1; i >= start; --i) {
+            if (arr[i] > arr[i + 1]) {
+                auto temp = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temp;
+                swapped = true;
+            }
+        }
+        start++;
+    }
+}
+
+// ------- INSERTION SORT -------
+template <typename Container>
+void insertionSort(Container& arr) {
+    int n = arr.getSize();
+    if (n <= 1) return;
+
+    for (int i = 1; i < n; ++i) {
+        auto key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// ------- MERGE SORT -------
+template <typename Container>
+void merge(Container& arr, int left, int mid, int right) {
+    using ValueType = std::remove_reference_t<decltype(arr[0])>;
+
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    DynamicArray<ValueType> L;
+    DynamicArray<ValueType> R;
+
+    for (int i = 0; i < n1; ++i) {
+        L.append(arr[left + i]);
+    }
+    for (int j = 0; j < n2; ++j) {
+        R.append(arr[mid + 1 + j]);
+    }
+
+    int i = 0, j = 0, k = left;
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+template <typename Container>
+void mergeSortRecursive(Container& arr, int left, int right) {
+    if (left >= right) return;
+
+    int mid = left + (right - left) / 2;
+    mergeSortRecursive(arr, left, mid);
+    mergeSortRecursive(arr, mid + 1, right);
+
+    merge(arr, left, mid, right);
+}
+
+template <typename Container>
+void mergeSort(Container& arr) {
+    int n = arr.getSize();
+    if (n <= 1) return;
+    mergeSortRecursive(arr, 0, n - 1);
+}
+
 #endif
