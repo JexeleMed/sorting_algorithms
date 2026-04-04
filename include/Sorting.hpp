@@ -3,6 +3,7 @@
 
 #include <type_traits>
 #include <random>
+#include "DynamicArray.hpp"
 
 // ------- SHELL SORT -------
 enum class ShellGap {
@@ -54,28 +55,40 @@ void shellSort(Container& arr, ShellGap gapType = ShellGap::ORIGINAL) {
 
 
 enum class PivotStrategy {
-    EXTREME, // Always pick the last element
-    MIDDLE,  // Pick the element in the middle of the current range
-    RANDOM   // Pick a random element in the current range
+    LEFT,
+    RIGHT,
+    MIDDLE,
+    RANDOM
 };
 
 template <typename Container>
 int partition(Container& arr, int low, int high, PivotStrategy strategy) {
-    int pivotIndex = high; // Default to EXTREME
+    int pivotIndex;
 
-    // Determine pivot index based on the chosen strategy
-    if (strategy == PivotStrategy::MIDDLE) {
-        pivotIndex = low + (high - low) / 2;
-    } else if (strategy == PivotStrategy::RANDOM) {
-        static std::random_device rd;
-        static std::mt19937 gen(rd());
-
-        std::uniform_int_distribution<int> dist(low, high);
-
-        pivotIndex = dist(gen);
+    // Pivot choice
+    switch (strategy) {
+        case PivotStrategy::LEFT:
+            pivotIndex = low;
+            break;
+        case PivotStrategy::RIGHT:
+            pivotIndex = high;
+            break;
+        case PivotStrategy::MIDDLE:
+            pivotIndex = low + (high - low) / 2;
+            break;
+        case PivotStrategy::RANDOM: {
+            static std::random_device rd;
+            static std::mt19937 gen(rd());
+            std::uniform_int_distribution<int> dist(low, high);
+            pivotIndex = dist(gen);
+            break;
+        }
+        default:
+            pivotIndex = high; // Fallback (Lomuto default)
+            break;
     }
 
-    // Swap the chosen pivot to the end to use Lomuto partition
+    // Lomuto setup. Switch position of the pivot to right
     auto tempPivot = arr[pivotIndex];
     arr[pivotIndex] = arr[high];
     arr[high] = tempPivot;
@@ -101,7 +114,7 @@ int partition(Container& arr, int low, int high, PivotStrategy strategy) {
     arr[i + 1] = arr[high];
     arr[high] = tempFinal;
 
-    // Return the partitioning index (the final, correct position of the pivot)
+    // Return the partitioning index
     return i + 1;
 }
 
@@ -116,9 +129,9 @@ void quickSortRecursive(Container& arr, int low, int high, PivotStrategy strateg
     }
 }
 
-// Public wrapper function to start Quick Sort
+// Public wrapper function to start Quick Sort (default RIGHT, because of Lomuto)
 template <typename Container>
-void quickSort(Container& arr, PivotStrategy strategy = PivotStrategy::EXTREME) {
+void quickSort(Container& arr, PivotStrategy strategy = PivotStrategy::RIGHT) {
     int n = arr.getSize();
     if (n <= 1) return;
     quickSortRecursive(arr, 0, n - 1, strategy);

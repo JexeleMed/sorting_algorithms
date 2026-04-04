@@ -109,7 +109,7 @@ int readParameters(int argc, char **argv)
     }
 
     //
-    // Parmeters that require passed value.
+    // Parameters that require passed value.
     //
     // Check if you can safely use the next value.
     //
