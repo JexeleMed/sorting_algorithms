@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <fstream>
 #include "Parameters.hpp"
 #include "DataGenerator.hpp"
 #include "Sorting.hpp"
@@ -41,6 +42,73 @@ namespace Benchmark {
             case Parameters::ShellParameters::option4:
             default:                                   return ShellGap::KNUTH;
         }
+    }
+
+
+    inline std::string getAlgorithmName() {
+        switch (Parameters::algorithm) {
+            case Parameters::Algorithms::bubble:    return "BubbleSort";
+            case Parameters::Algorithms::cocktail:  return "CocktailSort";
+            case Parameters::Algorithms::merge:     return "MergeSort";
+            case Parameters::Algorithms::insertion: return "InsertionSort";
+            case Parameters::Algorithms::bucket:    return "BucketSort";
+            case Parameters::Algorithms::quick:     return "QuickSort";
+            case Parameters::Algorithms::shell:     return "ShellSort";
+            default:                                return "Unknown";
+        }
+    }
+
+    inline std::string getStructureName() {
+        switch (Parameters::structure) {
+            case Parameters::Structures::array:      return "Array";
+            case Parameters::Structures::singleList: return "SinglyLinkedList";
+            case Parameters::Structures::doubleList: return "DoublyLinkedList";
+            default:                                 return "Unknown";
+        }
+    }
+
+    inline std::string getDistributionName() {
+        switch (Parameters::distribution) {
+            case Parameters::Distributions::random:     return "Random";
+            case Parameters::Distributions::ascending:  return "Ascending";
+            case Parameters::Distributions::descending: return "Descending";
+            case Parameters::Distributions::halfSorted: return "HalfSorted";
+            default:                                    return "Unknown";
+        }
+    }
+
+    inline void saveResultsToCSV(double averageTimeMs) {
+        if (Parameters::resultsFile.empty()) return;
+
+        // Headers if empty
+        bool needsHeader = false;
+        std::ifstream testFile(Parameters::resultsFile);
+        if (!testFile.is_open() || testFile.peek() == std::ifstream::traits_type::eof()) {
+            needsHeader = true;
+        }
+        testFile.close();
+
+        // Open file (append)
+        std::ofstream outFile(Parameters::resultsFile, std::ios::app);
+        if (!outFile.is_open()) {
+            std::cerr << "Error: Could not open or create results file: " << Parameters::resultsFile << "\n";
+            return;
+        }
+
+        if (needsHeader) {
+            outFile << "Algorithm;Structure;Distribution;Pivot(Quick);Size;Iterations;AverageTime_ms\n";
+        }
+
+        // Save to file
+        outFile << getAlgorithmName() << ";"
+                << getStructureName() << ";"
+                << getDistributionName() << ";"
+                << static_cast<int>(Parameters::pivot) << ";"
+                << Parameters::structureSize << ";"
+                << Parameters::iterations << ";"
+                << averageTimeMs << "\n";
+
+        outFile.close();
     }
 
     template <typename Container>
@@ -120,6 +188,7 @@ namespace Benchmark {
         std::cout << "Sorting ended! Average time: " << avgTime << " ms\n";
         std::cout << "Total time: " << totalTimeMs << " ms\n";
         std::cout << "--------------------------------------\n";
+        saveResultsToCSV(avgTime);
     }
 
     inline void execute() {
