@@ -11,6 +11,8 @@
 #include "DynamicArray.hpp"
 #include "SinglyLinkedList.hpp"
 #include "DoublyLinkedList.hpp"
+#include "Stack.hpp"
+#include "BinarySearchTree.hpp"
 
 namespace Benchmark {
 
@@ -63,6 +65,8 @@ namespace Benchmark {
             case Parameters::Structures::array:      return "Array";
             case Parameters::Structures::singleList: return "SinglyLinkedList";
             case Parameters::Structures::doubleList: return "DoublyLinkedList";
+            case Parameters::Structures::stack:      return "Stack";
+            case Parameters::Structures::binaryTree: return "BinarySearchTree";
             default:                                 return "Unknown";
         }
     }
@@ -112,7 +116,7 @@ namespace Benchmark {
     }
 
     template <typename Container>
-        double executeSortingAlgorithm(Container& container) {
+    double executeSortingAlgorithm(Container& container) {
         auto start = std::chrono::high_resolution_clock::now();
 
         if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -139,6 +143,56 @@ namespace Benchmark {
         else {
             std::cerr << "\n[!] Benchmark does not support this algorithm yet!\n";
             return 0.0;
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+        return elapsed.count();
+    }
+
+    template <typename T>
+    double testStackSorting(int size, DataGenerator::Distribution dist) {
+        DynamicArray<T> rawData;
+        DataGenerator::populate<DynamicArray<T>, T>(rawData, size, dist);
+
+        Stack<T> stack;
+        for (int j = 0; j < rawData.getSize(); ++j) stack.push(rawData[j]);
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        DynamicArray<T> temp;
+        while (!stack.empty()) {
+            temp.append(stack.top());
+            stack.pop();
+        }
+
+        if (Parameters::algorithm == Parameters::Algorithms::quick) quickSort(temp, getPivotStrategy());
+        else if (Parameters::algorithm == Parameters::Algorithms::shell) shellSort(temp, getShellGap());
+        else if (Parameters::algorithm == Parameters::Algorithms::bucket) bucketSort(temp);
+        else if (Parameters::algorithm == Parameters::Algorithms::bubble) bubbleSort(temp);
+        else if (Parameters::algorithm == Parameters::Algorithms::cocktail) cocktailSort(temp);
+        else if (Parameters::algorithm == Parameters::Algorithms::insertion) insertionSort(temp);
+        else if (Parameters::algorithm == Parameters::Algorithms::merge) mergeSort(temp);
+
+        for (int j = temp.getSize() - 1; j >= 0; --j) {
+            stack.push(temp[j]);
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+        return elapsed.count();
+    }
+
+    template <typename T>
+    double testTreeSorting(int size, DataGenerator::Distribution dist) {
+        DynamicArray<T> rawData;
+        DataGenerator::populate<DynamicArray<T>, T>(rawData, size, dist);
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        BinarySearchTree<T> bst;
+        for (int j = 0; j < rawData.getSize(); ++j) {
+            bst.insert(rawData[j]);
         }
 
         auto end = std::chrono::high_resolution_clock::now();
@@ -174,6 +228,12 @@ namespace Benchmark {
                 DoublyLinkedList<T> dList;
                 DataGenerator::populate<DoublyLinkedList<T>, T>(dList, Parameters::structureSize, currentDist);
                 iterationTime = executeSortingAlgorithm(dList);
+            }
+            else if (Parameters::structure == Parameters::Structures::stack) {
+                iterationTime = testStackSorting<T>(Parameters::structureSize, currentDist);
+            }
+            else if (Parameters::structure == Parameters::Structures::binaryTree) {
+                iterationTime = testTreeSorting<T>(Parameters::structureSize, currentDist);
             }
             else {
                 std::cerr << "\n[!] This structure is not handled in benchmark!\n";
@@ -228,6 +288,11 @@ namespace Benchmark {
             if (Parameters::structure == Parameters::Structures::array) arr.append(value);
             else if (Parameters::structure == Parameters::Structures::singleList) sList.append(value);
             else if (Parameters::structure == Parameters::Structures::doubleList) dList.append(value);
+            else {
+                std::cerr << "Error: Unsupported structure for single file mode!\n";
+                inFile.close();
+                return;
+            }
         }
         inFile.close();
 
