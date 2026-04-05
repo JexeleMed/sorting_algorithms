@@ -80,6 +80,19 @@ namespace Benchmark {
             default:                                    return "Unknown";
         }
     }
+    inline std::string getDataTypeName() {
+        switch (Parameters::dataType) {
+            case Parameters::DataTypes::typeInt:          return "Int";
+            case Parameters::DataTypes::typeFloat:        return "Float";
+            case Parameters::DataTypes::typeDouble:       return "Double";
+            case Parameters::DataTypes::typeChar:         return "Char";
+            case Parameters::DataTypes::typeString:       return "String";
+            case Parameters::DataTypes::tyleUnsignedInt:  return "UnsignedInt";
+            case Parameters::DataTypes::typeUnsignedLong: return "UnsignedLong";
+            case Parameters::DataTypes::typeUnsignedChar: return "UnsignedChar";
+            default:                                      return "Unknown";
+        }
+    }
 
     inline void saveResultsToCSV(double averageTimeMs) {
         if (Parameters::resultsFile.empty()) return;
@@ -100,12 +113,13 @@ namespace Benchmark {
         }
 
         if (needsHeader) {
-            outFile << "Algorithm;Structure;Distribution;Pivot(Quick);Size;Iterations;AverageTime_ms\n";
+            outFile << "Algorithm;Structure;DataType;Distribution;Pivot(Quick);Size;Iterations;AverageTime_ms\n";
         }
 
         // Save to file
         outFile << getAlgorithmName() << ";"
                 << getStructureName() << ";"
+                << getDataTypeName() << ";"
                 << getDistributionName() << ";"
                 << static_cast<int>(Parameters::pivot) << ";"
                 << Parameters::structureSize << ";"
@@ -325,17 +339,27 @@ namespace Benchmark {
         std::cout << "Results successfully saved to " << Parameters::outputFile << "\n";
     }
 
-    inline void execute() {
+inline void execute() {
         if (Parameters::runMode == Parameters::RunModes::benchmark) {
             if (Parameters::dataType == Parameters::DataTypes::typeInt) runSortingTests<int>();
             else if (Parameters::dataType == Parameters::DataTypes::typeFloat) runSortingTests<float>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeDouble) runSortingTests<double>();
             else if (Parameters::dataType == Parameters::DataTypes::typeChar) runSortingTests<char>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeString) runSortingTests<std::string>();
+            else if (Parameters::dataType == Parameters::DataTypes::tyleUnsignedInt) runSortingTests<unsigned int>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeUnsignedLong) runSortingTests<unsigned long>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeUnsignedChar) runSortingTests<unsigned char>();
             else std::cerr << "This data type in not supported yet!\n";
         }
         else if (Parameters::runMode == Parameters::RunModes::singleFile) {
             if (Parameters::dataType == Parameters::DataTypes::typeInt) runSingleFileTest<int>();
             else if (Parameters::dataType == Parameters::DataTypes::typeFloat) runSingleFileTest<float>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeDouble) runSingleFileTest<double>();
             else if (Parameters::dataType == Parameters::DataTypes::typeChar) runSingleFileTest<char>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeString) runSingleFileTest<std::string>();
+            else if (Parameters::dataType == Parameters::DataTypes::tyleUnsignedInt) runSingleFileTest<unsigned int>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeUnsignedLong) runSingleFileTest<unsigned long>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeUnsignedChar) runSingleFileTest<unsigned char>();
             else std::cerr << "This data type in not supported yet!\n";
         }
     }

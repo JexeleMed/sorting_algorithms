@@ -4,6 +4,7 @@
 #include <random>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 namespace DataGenerator {
 
@@ -39,9 +40,51 @@ namespace DataGenerator {
     }
 
     template<>
+    inline double generateSingle<double>() {
+        std::uniform_real_distribution<double> dist(1.0, 100000.0);
+        return dist(getEngine());
+    }
+
+    template<>
+    inline unsigned int generateSingle<unsigned int>() {
+        std::uniform_int_distribution<unsigned int> dist(1, 100000);
+        return dist(getEngine());
+    }
+
+    template<>
+    inline unsigned long generateSingle<unsigned long>() {
+        std::uniform_int_distribution<unsigned long> dist(1, 100000);
+        return dist(getEngine());
+    }
+
+    template<>
+    inline unsigned char generateSingle<unsigned char>() {
+        std::uniform_int_distribution<int> dist(33, 126);
+        return static_cast<unsigned char>(dist(getEngine()));
+    }
+
+    template<>
     inline char generateSingle<char>() {
         std::uniform_int_distribution<int> dist(33, 126);
         return static_cast<char>(dist(getEngine()));
+    }
+
+    template<>
+    inline std::string generateSingle<std::string>() {
+        // Random string length
+        std::uniform_int_distribution<int> lengthDist(5, 12);
+        // Printable
+        std::uniform_int_distribution<int> charDist(33, 126);
+
+        int len = lengthDist(getEngine());
+        std::string result;
+        result.reserve(len);
+
+        for (int i = 0; i < len; ++i) {
+            result.push_back(static_cast<char>(charDist(getEngine())));
+        }
+
+        return result;
     }
 
     template <typename Container, typename T>

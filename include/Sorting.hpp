@@ -142,56 +142,52 @@ void quickSort(Container& arr, PivotStrategy strategy = PivotStrategy::RIGHT) {
 // ------- BUCKET SORT -------
 template <typename Container>
 void bucketSort(Container& arr) {
-    int n = arr.getSize();
-    if (n <= 1) return;
-
-    // Check the range
     using ValueType = std::remove_reference_t<decltype(arr[0])>;
 
-    ValueType minVal = arr[0];
-    ValueType maxVal = arr[0];
-
-    for (int i = 1; i < n; ++i) {
-        if (arr[i] < minVal) minVal = arr[i];
-        if (arr[i] > maxVal) maxVal = arr[i];
+    if constexpr (!std::is_arithmetic_v<ValueType>) {
+        std::cerr << "\n[!] Bucket Sort is not supported for non-numeric types (e.g., std::string)!\n";
+        return;
     }
+    else {
+        int n = arr.getSize();
+        if (n <= 1) return;
 
-    // If elements are the same it's sorted
-    if (minVal == maxVal) return;
+        ValueType minVal = arr[0];
+        ValueType maxVal = arr[0];
 
-    // Create dynamic buckets
-    int numBuckets = n;
-    auto* buckets = new DynamicArray<ValueType>[numBuckets];
-
-    // Divide elements into the buckets
-    for (int i = 0; i < n; ++i) {
-        // Relative position of the element (from 0.0 to 1.0)
-        double range = static_cast<double>(maxVal) - static_cast<double>(minVal);
-        double normalized = (static_cast<double>(arr[i]) - static_cast<double>(minVal)) / range;
-
-        // Multiply by (numBuckets - 1) to get the correct bucket index
-        int bucketIndex = static_cast<int>(normalized * (numBuckets - 1));
-
-        buckets[bucketIndex].append(arr[i]);
-    }
-
-    // Sort each individual bucket
-    for (int i = 0; i < numBuckets; ++i) {
-        if (buckets[i].getSize() > 1) {
-            shellSort(buckets[i], ShellGap::KNUTH);
+        for (int i = 1; i < n; ++i) {
+            if (arr[i] < minVal) minVal = arr[i];
+            if (arr[i] > maxVal) maxVal = arr[i];
         }
-    }
 
-    // Gather elements into the original array
-    int currentIndex = 0;
-    for (int i = 0; i < numBuckets; ++i) {
-        for (int j = 0; j < buckets[i].getSize(); ++j) {
-            arr[currentIndex] = buckets[i][j];
-            currentIndex++;
+        if (minVal == maxVal) return;
+
+        int numBuckets = n;
+        auto* buckets = new DynamicArray<ValueType>[numBuckets];
+
+        for (int i = 0; i < n; ++i) {
+            double range = static_cast<double>(maxVal) - static_cast<double>(minVal);
+            double normalized = (static_cast<double>(arr[i]) - static_cast<double>(minVal)) / range;
+            int bucketIndex = static_cast<int>(normalized * (numBuckets - 1));
+            buckets[bucketIndex].append(arr[i]);
         }
-    }
 
-    delete[] buckets;
+        for (int i = 0; i < numBuckets; ++i) {
+            if (buckets[i].getSize() > 1) {
+                shellSort(buckets[i], ShellGap::KNUTH);
+            }
+        }
+
+        int currentIndex = 0;
+        for (int i = 0; i < numBuckets; ++i) {
+            for (int j = 0; j < buckets[i].getSize(); ++j) {
+                arr[currentIndex] = buckets[i][j];
+                currentIndex++;
+            }
+        }
+
+        delete[] buckets;
+    }
 }
 
 
