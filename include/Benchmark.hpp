@@ -191,11 +191,88 @@ namespace Benchmark {
         saveResultsToCSV(avgTime);
     }
 
+    template <typename T>
+    void runSingleFileTest() {
+        if (Parameters::inputFile.empty() || Parameters::outputFile.empty()) {
+            std::cerr << "Error: Input and output files must be specified for single file mode!\n";
+            return;
+        }
+
+        // Open input file
+        std::ifstream inFile(Parameters::inputFile);
+        if (!inFile.is_open()) {
+            std::cerr << "Error: Could not open input file: " << Parameters::inputFile << "\n";
+            return;
+        }
+
+        int n;
+        if (!(inFile >> n) || n <= 0) {
+            std::cerr << "Error: Invalid or missing data size in input file!\n";
+            inFile.close();
+            return;
+        }
+
+        // Load data into appropriate structure
+        DynamicArray<T> arr;
+        SinglyLinkedList<T> sList;
+        DoublyLinkedList<T> dList;
+
+        for (int i = 0; i < n; ++i) {
+            T value;
+            if (!(inFile >> value)) {
+                std::cerr << "Error: Not enough data in input file!\n";
+                inFile.close();
+                return;
+            }
+
+            if (Parameters::structure == Parameters::Structures::array) arr.append(value);
+            else if (Parameters::structure == Parameters::Structures::singleList) sList.append(value);
+            else if (Parameters::structure == Parameters::Structures::doubleList) dList.append(value);
+        }
+        inFile.close();
+
+        // Execute sorting
+        std::cout << "Data loaded. Sorting started...\n";
+        double sortTime = 0.0;
+
+        if (Parameters::structure == Parameters::Structures::array) sortTime = executeSortingAlgorithm(arr);
+        else if (Parameters::structure == Parameters::Structures::singleList) sortTime = executeSortingAlgorithm(sList);
+        else if (Parameters::structure == Parameters::Structures::doubleList) sortTime = executeSortingAlgorithm(dList);
+
+        std::cout << "Sorting finished in " << sortTime << " ms.\n";
+
+        // Save to output file
+        std::ofstream outFile(Parameters::outputFile);
+        if (!outFile.is_open()) {
+            std::cerr << "Error: Could not open output file: " << Parameters::outputFile << "\n";
+            return;
+        }
+
+        outFile << n << "\n";
+        for (int i = 0; i < n; ++i) {
+            if (Parameters::structure == Parameters::Structures::array) outFile << arr[i] << " ";
+            else if (Parameters::structure == Parameters::Structures::singleList) outFile << sList[i] << " ";
+            else if (Parameters::structure == Parameters::Structures::doubleList) outFile << dList[i] << " ";
+        }
+        outFile << "\n";
+        outFile.close();
+
+        std::cout << "Results successfully saved to " << Parameters::outputFile << "\n";
+    }
+
     inline void execute() {
-        if (Parameters::dataType == Parameters::DataTypes::typeInt) runSortingTests<int>();
-        else if (Parameters::dataType == Parameters::DataTypes::typeFloat) runSortingTests<float>();
-        else if (Parameters::dataType == Parameters::DataTypes::typeChar) runSortingTests<char>();
-        else std::cerr << "This data type in not supported yet!\n";
+        if (Parameters::runMode == Parameters::RunModes::benchmark) {
+            if (Parameters::dataType == Parameters::DataTypes::typeInt) runSortingTests<int>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeFloat) runSortingTests<float>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeChar) runSortingTests<char>();
+            else std::cerr << "This data type in not supported yet!\n";
+        }
+        else if (Parameters::runMode == Parameters::RunModes::singleFile) {
+            if (Parameters::dataType == Parameters::DataTypes::typeInt) runSingleFileTest<int>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeFloat) runSingleFileTest<float>();
+            else if (Parameters::dataType == Parameters::DataTypes::typeChar) runSingleFileTest<char>();
+            else std::cerr << "This data type in not supported yet!\n";
+        }
     }
 }
 

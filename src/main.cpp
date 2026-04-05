@@ -8,16 +8,26 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    if (Parameters::runMode == Parameters::RunModes::help) {
-        Parameters::help();
-        return 0;
-    }
+    switch (Parameters::runMode) {
+        case Parameters::RunModes::help:
+            Parameters::help();
+            break;
 
-    if (Parameters::runMode == Parameters::RunModes::benchmark) {
-        std::cout << "\n=== BENCHMARK ===\n";
-        Parameters::printParameters();
+        case Parameters::RunModes::benchmark:
+            std::cout << "\n=== BENCHMARK ===\n";
+            Parameters::printParameters();
+            Benchmark::execute();
+            break;
 
-        Benchmark::execute();
+        case Parameters::RunModes::singleFile:
+            std::cout << "\n=== SINGLE FILE MODE ===\n";
+            Parameters::printParameters();
+            Benchmark::execute();
+            break;
+
+        default:
+            std::cerr << "\nError: No run mode specified! Use -h for help.\n";
+            return -1;
     }
 
     return 0;
