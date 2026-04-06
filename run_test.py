@@ -25,7 +25,8 @@ types = {"Int": 0, "Float": 1, "Unsigned": 5, "String": 4}
 sizes_A = [10000, 25000, 50000, 100000]
 mid_size = 25000
 
-def run_cmd(alg, struct, typ, dist, data_size, pivot_val=-1, shell_val=-1):
+
+def run_cmd(alg, struct, typ, dist, data_size, pivot_val=0, shell_val=0):
     cmd = f"{EXEC} --benchmark -a {alg} -s {struct} -t {typ} -d {dist} -l {data_size} -n {ITERS} -r {RES} -p {pivot_val} -e {shell_val}"
     print(f" Running: {cmd}")
     os.system(cmd)
@@ -44,15 +45,12 @@ with open(RES, "w") as f:
 # ==========================================
 print("\n--- TEST ALFA ---")
 write_divider("TEST ALFA: Parameters influence")
-# Shella: 0 = Original, 1 = Knuth
 for shell_gap in [0, 1]:
     run_cmd(algos["Shell"], structs["Array"], types["Int"], dists["Random"], mid_size, shell_val=shell_gap)
 
-# Quick: three pivots (0 = Random, 1 = Left, 3 = Middle)
 for pivot in [0, 1, 3]:
     run_cmd(algos["Quick"], structs["Array"], types["Int"], dists["Random"], mid_size, pivot_val=pivot)
 
-# Best parameters
 OPT_PIVOT = 3  # Middle
 OPT_SHELL = 1  # Knuth
 
@@ -76,7 +74,7 @@ print("\n--- TEST B ---")
 write_divider("TEST B: Distribution influence")
 for struct_name, struct_val in structs.items():
     for dist_name, dist_val in dists.items():
-        run_cmd(CHOSEN_ALG, struct_val, types["Int"], dist_val, CHOSEN_SIZE, pivot_val=OPT_PIVOT)
+        run_cmd(CHOSEN_ALG, struct_val, types["Int"], dist_val, CHOSEN_SIZE, pivot_val=OPT_PIVOT, shell_val=OPT_SHELL)
 
 # ==========================================
 # TEST C: Data type influence
@@ -84,7 +82,7 @@ for struct_name, struct_val in structs.items():
 print("\n--- TEST C ---")
 write_divider("TEST C: Data type influence")
 for type_name, type_val in types.items():
-    run_cmd(CHOSEN_ALG, structs["Array"], type_val, dists["Random"], CHOSEN_SIZE, pivot_val=OPT_PIVOT)
+    run_cmd(CHOSEN_ALG, structs["Array"], type_val, dists["Random"], CHOSEN_SIZE, pivot_val=OPT_PIVOT, shell_val=OPT_SHELL)
 
 # ==========================================
 # TEST OMEGA: Non-linear data structures
@@ -93,6 +91,6 @@ print("\n--- TEST OMEGA ---")
 write_divider("TEST OMEGA: Non-linear structures")
 all_structs_omega = {**structs, **structs_omega}
 for struct_name, struct_val in all_structs_omega.items():
-    run_cmd(CHOSEN_ALG, struct_val, types["Int"], dists["Random"], CHOSEN_SIZE, pivot_val=OPT_PIVOT)
+    run_cmd(CHOSEN_ALG, struct_val, types["Int"], dists["Random"], CHOSEN_SIZE, pivot_val=OPT_PIVOT, shell_val=OPT_SHELL)
 
 print("\nALL TESTS HAVE BEEN FINISHED. RESULTS IN ", RES)
