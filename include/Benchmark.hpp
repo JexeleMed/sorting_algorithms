@@ -214,7 +214,7 @@ namespace Benchmark {
         return elapsed.count();
     }
 
-    template <typename T>
+template <typename T>
     void runSortingTests() {
         if (Parameters::structureSize <= 0 || Parameters::iterations <= 0) {
             std::cerr << "Error: Size of structure and number of iterations must be bigger than zero!\n";
@@ -223,6 +223,18 @@ namespace Benchmark {
 
         double totalTimeMs = 0.0;
         std::cout << "Data generation. Starting benchmark (" << Parameters::iterations << " iterations)...\n";
+
+        std::ofstream detailsFile("details.csv", std::ios::app);
+        if (!detailsFile.is_open()) {
+            std::cerr << "Warning: Could not open details.csv for writing individual iterations.\n";
+        } else {
+            std::ifstream checkFile("details.csv");
+            if (checkFile.peek() == std::ifstream::traits_type::eof()) {
+                detailsFile << "Algorithm;Structure;DataType;Distribution;Size;Iteration;Time_ms\n";
+            }
+            checkFile.close();
+        }
+        // ===========================================
 
         for (int i = 0; i < Parameters::iterations; ++i) {
             double iterationTime = 0.0;
@@ -251,10 +263,26 @@ namespace Benchmark {
             }
             else {
                 std::cerr << "\n[!] This structure is not handled in benchmark!\n";
+                if (detailsFile.is_open()) detailsFile.close();
                 return;
             }
 
+            if (detailsFile.is_open()) {
+                detailsFile << getAlgorithmName() << ";"
+                            << getStructureName() << ";"
+                            << getDataTypeName() << ";"
+                            << getDistributionName() << ";"
+                            << Parameters::structureSize << ";"
+                            << (i + 1) << ";"
+                            << iterationTime << "\n";
+            }
+            // =========================================
+
             totalTimeMs += iterationTime;
+        }
+
+        if (detailsFile.is_open()) {
+            detailsFile.close();
         }
 
         double avgTime = totalTimeMs / Parameters::iterations;

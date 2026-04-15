@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <limits>
 
 namespace DataGenerator {
 
@@ -28,32 +29,32 @@ namespace DataGenerator {
     }
 
     template<>
-    inline int generateSingle<int>() {
-        std::uniform_int_distribution<int> dist(1, 100000);
+        inline int generateSingle<int>() {
+        std::uniform_int_distribution<int> dist(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         return dist(getEngine());
     }
 
     template<>
     inline float generateSingle<float>() {
-        std::uniform_real_distribution<float> dist(1.0f, 100000.0f);
+        std::uniform_real_distribution<float> dist(-100000.0f, 100000.0f);
         return dist(getEngine());
     }
 
     template<>
     inline double generateSingle<double>() {
-        std::uniform_real_distribution<double> dist(1.0, 100000.0);
+        std::uniform_real_distribution<double> dist(-1000000.0, 1000000.0);
         return dist(getEngine());
     }
 
     template<>
     inline unsigned int generateSingle<unsigned int>() {
-        std::uniform_int_distribution<unsigned int> dist(1, 100000);
+        std::uniform_int_distribution<unsigned int> dist(std::numeric_limits<unsigned int>::min(), std::numeric_limits<unsigned int>::max());
         return dist(getEngine());
     }
 
     template<>
     inline unsigned long generateSingle<unsigned long>() {
-        std::uniform_int_distribution<unsigned long> dist(1, 100000);
+        std::uniform_int_distribution<unsigned long> dist(std::numeric_limits<unsigned long>::min(), std::numeric_limits<unsigned long>::max());
         return dist(getEngine());
     }
 
