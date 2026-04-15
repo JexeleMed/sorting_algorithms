@@ -72,6 +72,10 @@ Testing/
 # Test results
 res.txt
 input.txt
-output.txt
+output.txt§q
 test_commands.txt
-res.csv
+*.csv
+
+
+# Wokrspace
+.idea/
