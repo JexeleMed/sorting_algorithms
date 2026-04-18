@@ -28,10 +28,10 @@ namespace Benchmark {
 
     inline DataGenerator::Distribution getDistribution() {
         switch (Parameters::distribution) {
-            case Parameters::Distributions::ascending:  return DataGenerator::Distribution::ASCENDING;
-            case Parameters::Distributions::descending: return DataGenerator::Distribution::DESCENDING;
-            case Parameters::Distributions::halfSorted: return DataGenerator::Distribution::HALF_SORTED;
-            case Parameters::Distributions::random:
+            case Parameters::Distribution::ascending:  return DataGenerator::Distribution::ASCENDING;
+            case Parameters::Distribution::descending: return DataGenerator::Distribution::DESCENDING;
+            case Parameters::Distribution::ascending50Per: return DataGenerator::Distribution::HALF_SORTED;
+            case Parameters::Distribution::random:
             default:                                    return DataGenerator::Distribution::RANDOM;
         }
     }
@@ -73,10 +73,10 @@ namespace Benchmark {
 
     inline std::string getDistributionName() {
         switch (Parameters::distribution) {
-            case Parameters::Distributions::random:     return "Random";
-            case Parameters::Distributions::ascending:  return "Ascending";
-            case Parameters::Distributions::descending: return "Descending";
-            case Parameters::Distributions::halfSorted: return "HalfSorted";
+            case Parameters::Distribution::random:     return "Random";
+            case Parameters::Distribution::ascending:  return "Ascending";
+            case Parameters::Distribution::descending: return "Descending";
+            case Parameters::Distribution::ascending50Per: return "ascending50Per";
             default:                                    return "Unknown";
         }
     }

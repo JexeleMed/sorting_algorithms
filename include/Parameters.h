@@ -1,7 +1,7 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-#define LIB_VERSION "v.1.1"
+#define LIB_VERSION "v.1.2"
 
 #include <string>
 
@@ -53,6 +53,16 @@ namespace Parameters
     count
   };
 
+  enum class Distribution {
+    undefined = -1,
+    random = 0,
+    ascending,
+    ascending50Per,
+    descending,
+
+    count
+  };
+
   enum class Pivots {
     undefined = -1,
     random = 0,
@@ -73,16 +83,6 @@ namespace Parameters
     count
   };
 
-  enum class Distributions {
-    undefined = -1,
-    random = 0,
-    ascending,
-    descending,
-    halfSorted,
-
-    count
-  };
-
   //
   // Parameters to use.
   //
@@ -91,11 +91,12 @@ namespace Parameters
   extern Algorithms algorithm;
   extern Structures structure;
   extern DataTypes dataType;
-  extern Distributions distribution;
 
   extern std::string inputFile;
   extern std::string outputFile;
   extern std::string resultsFile;
+
+  extern Distribution distribution;
 
   extern int structureSize;
   extern int iterations;

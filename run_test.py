@@ -16,7 +16,7 @@ structs = {"Array": 0, "SList": 1, "DList": 2}
 structs_omega = {"Stack": 4, "BST": 5}
 
 # Distributions
-dists = {"Random": 0, "Ascending": 1, "Descending": 2, "HalfSorted": 3}
+dists = {"Random": 0, "Ascending": 1, "HalfSorted": 2, "Descending": 3}
 
 # Data types
 types = {"Int": 0, "Float": 1, "Unsigned": 5, "String": 4}

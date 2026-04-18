@@ -16,10 +16,12 @@ RunModes runMode = RunModes::undefined;
 Algorithms algorithm = Algorithms::undefined;
 Structures structure = Structures::undefined;
 DataTypes dataType = DataTypes::undefined;
-Distributions distribution = Distributions::random;
+
 std::string inputFile = {};
 std::string outputFile = {};
 std::string resultsFile = {};
+
+Distribution distribution = Distribution::undefined;
 
 int structureSize = -1;
 int iterations = -1;
@@ -107,8 +109,9 @@ int readParameters(int argc, char **argv)
       runMode = RunModes::help;
       continue;
     }
+
     //
-    // Parameters that require passed value.
+    // Parmeters that require passed value.
     //
     // Check if you can safely use the next value.
     //
@@ -145,11 +148,6 @@ int readParameters(int argc, char **argv)
       updateEnumParameter(dataType, DataTypes::count, value);
       continue;
     }
-    if (check(arg, "--distribution", "-d"))
-    {
-      distribution = static_cast<Distributions>(std::stoi(value));
-      continue;
-    }
 
     if (check(arg, "--inputFile", "-i"))
     {
@@ -166,6 +164,12 @@ int readParameters(int argc, char **argv)
     if (check(arg, "--resultsFile", "-r"))
     {
       resultsFile = value;
+      continue;
+    }
+
+    if (check(arg, "--distribution", "-d"))
+    {
+      updateEnumParameter(distribution, Distribution::count, value);
       continue;
     }
 
@@ -272,18 +276,17 @@ void help()
   std::cout << "\n";
   std::cout << "Benchmark options:\n";
   std::cout << "  -r, --resultsFile FILE   Results (time and parameters) will be saved to this file\n";
+  std::cout << "  -d, --distribution VAL   0 - random\n";
+  std::cout << "                           1 - ascending\n";
+  std::cout << "                           2 - sorted (ascending) in 50%\n";
+  std::cout << "                           3 - descending\n";
   std::cout << "  -l, --structureSize LEN  How many elements in the structure.\n";
   std::cout << "  -n, --iterations ITE :)  How many repetitions of the research with the given parameters.\n";
-  std::cout << "  -d, --distribution <int>  \n";
-  std::cout << "                        0 - random \n";
-  std::cout << "                        1 - ascending\n";
-  std::cout << "                        2 - descending\n";
-  std::cout << "                        3 - half-sorted\n";
   std::cout << "Examples:\n";
   std::cout << "  ./project --singleFile --inputFile \"in.txt\" --outputFile \"out.txt\" -a 0 -s 1 -t 0\n";
   std::cout << "  Sort values from file \"in.txt\". Bubble sort, single linked list, integers. Save sorted values in \"out.txt\"\n";
-  std::cout << "  ./project --benchmark -a 4 -p 1 -s 1 -t 4 -l 10000 -n 50 -r \"res.txt\"\n";
-  std::cout << "  Repeat following test 50 times: Linked list of 10000 random unsigned int elements. Use quicksort with the left pivot. Results save in \"res.txt\"\n";
+  std::cout << "  ./project --benchmark -a 4 -p 1 -s 1 -t 4 -d 3 -l 10000 -n 50 -r \"res.txt\"\n";
+  std::cout << "  Repeat following test 50 times: Linked list of 10000 random unsigned int elements initially sorted in descending order. Use quicksort with the left pivot. Results save in \"res.txt\"\n";
   std::cout << "\n";
 }
 
@@ -296,13 +299,13 @@ void printParameters()
             << LOG_ENUM(structure) << ", "
             << LOG_ENUM(dataType) << ", "
             << LOG_ENUM(pivot) << ", "
-            << LOG_ENUM(shellParameter) << ", "
-            << LOG_ENUM(distribution) << "\n";
+            << LOG_ENUM(shellParameter) << "\n";
   std::cout << "Single file options:\n";
   std::cout << LOG(inputFile) << ", "
             << LOG(outputFile) << "\n";
   std::cout << "Benchmark options:\n";
   std::cout << LOG(resultsFile) << ", "
+            << LOG_ENUM(distribution) << ", "
             << LOG(structureSize) << ", "
             << LOG(iterations) << "\n";
 }
