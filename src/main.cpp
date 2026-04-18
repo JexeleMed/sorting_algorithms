@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Parameters.hpp"
+#include "Parameters.h"
 #include "Benchmark.hpp"
 
 int main(int argc, char** argv) {

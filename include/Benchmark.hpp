@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
-#include "Parameters.hpp"
+#include "Parameters.h"
 #include "DataGenerator.hpp"
 #include "Sorting.hpp"
 
