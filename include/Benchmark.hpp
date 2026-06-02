@@ -357,9 +357,9 @@ template <typename T>
 
         outFile << n << "\n";
         for (int i = 0; i < n; ++i) {
-            if (Parameters::structure == Parameters::Structures::array) outFile << arr[i] << " ";
-            else if (Parameters::structure == Parameters::Structures::singleList) outFile << sList[i] << " ";
-            else if (Parameters::structure == Parameters::Structures::doubleList) outFile << dList[i] << " ";
+            if (Parameters::structure == Parameters::Structures::array) outFile << arr[i] << "\n";
+            else if (Parameters::structure == Parameters::Structures::singleList) outFile << sList[i] << "\n";
+            else if (Parameters::structure == Parameters::Structures::doubleList) outFile << dList[i] << "\n";
         }
         outFile << "\n";
         outFile.close();
