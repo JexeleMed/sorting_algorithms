@@ -76,7 +76,11 @@ output.txt§q
 test_commands.txt
 *.csv
 output.txt
+graphs/
 
 
 # Wokrspace
 .idea/
+
+#MACOS
+.DS_Store
